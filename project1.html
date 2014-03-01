@@ -5,7 +5,9 @@
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
 <style>
-svg { border: solid black 1px; }
+body { background-color:#6f6f6f;}
+svg { 
+border: solid black 1px; }
 .axis path { fill: none; stroke: black;}
 .axis line { stroke: black; }
 text { font-size: small; opacity: 0.3; text-anchor: middle; alignment-baseline: central; }
@@ -22,7 +24,7 @@ text:hover { fill: blue; opacity: 1.0; font-weight: bold; font-size: xx-large; }
 <script>
 
 var xScale = d3.scale.linear()
-  .domain([-4, 4]).range([50,780]);
+  .domain([2008, 2012]).range([50,780]);
 var yScale = d3.scale.log()
   .domain([100,26000]).range([750,20]);
 
@@ -55,37 +57,59 @@ svg.append("g")
 	.attr("transform", "translate(50, 0)")
 	.call(yAxis);
 
-var breathTest;
-var male = 0; //517057 males
-var female = 0;//134074
+function calculateMaleFemale(file,callback){
+
+	
+	var breathTest;
+	d3.csv(file, function (data) {
+		
+	    breathTest = data;
+		maleFemale = [0,0]
+		breathTest.forEach(function(entry){
+			if (entry.Gender == 'Male'){
+				maleFemale[0]++;
+			}
+			else{
+				maleFemale[1]++;
+			}
+			
+			})
+		callback(maleFemale);
+	  });
+};
+
 //Reasons = ["Road Traffic Collision", "Suspicion of Alcohol", "Moving Traffic Violation", "Other"]
 roadCol = 0;//200882
 alcohol = 0;//144274
 trafficVio = 0;//230766
 others = 0;//75209
+wScale = xScale = d3.scale.linear()
+  .domain([0, 600000]).range([1,200]);
+function drawFigures(file,x,y){
+	calculateMaleFemale(file,function(maleFemaleArray){
+		//Creates an man icon with size relative to the amount of man's death
+		svg.append("image")
+		.attr("xlink:href","man-icon-hi.png")
+		.attr("width",wScale(maleFemaleArray[0]))
+		.attr("height",wScale(maleFemaleArray[0]))
+		.attr("x",x)
+		.attr("y",y);
+		//Creates an woman icon with size relative to the amount of woman's death to be compared with man
+		svg.append("image")
+		.attr("xlink:href","pink-female-hi.png")
+		.attr("width",wScale(maleFemaleArray[1]))
+		.attr("height",wScale(maleFemaleArray[1]))
+		.attr("x",x)
+		.attr("y",y);
+		console.log(file);
+	});
+};
+drawFigures("DigitalBreathTestData2009.csv",50,50);
+drawFigures("DigitalBreathTestData2010.csv",50,50);
+//var maleFemale2010 = calculateMaleFemale("DigitalBreathTestData2010.csv");
+//var maleFemale2011 = calculateMaleFemale("DigitalBreathTestData2011.csv");
 
-d3.csv("DigitalBreathTestData2009.csv", function (data) {
-  breathTest = data;
-  breathTest.forEach(function(entry){
-        if (entry.Reason == "Road Traffic Collision"){
-            roadCol++;
-        }else if(entry.Reason == "Suspicion of Alcohol"){
-            alcohol++;
-        }else if(entry.Reason == "Moving Traffic Violation"){
-            trafficVio++;
-        }else{
-            others++;
-        }
-        
-        if (entry.Gender == 'Male'){
-            male++;
-        }
-        else{
-            female++;
-        }
-  });
-  
-});
+
 
 </script>
 </body>
