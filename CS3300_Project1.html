@@ -41,8 +41,25 @@
     d3.csv("test.csv", function (d) {
     	data.push(d);
     })
+	
+	
+function calculateCrimeCount(file,callback){
 
+	
+	var stateCrimeCount = new Object();
+	var crimeState;
+	d3.csv(file, function (data) {
+		
+	    crimeState = data;
+		crimeState.forEach(function(entry){
+			stateCrimeCount[entry.State] = entry.Count;			
+			})
+		callback(stateCrimeCount);
+	  });
+};
     // Draw the map of the 50 states
+	calculateCrimeCount("CrimeStatebyState.csv",function(stateCrimeCount){
+	
     d3.json("us.json", function(error, us) {
         mapData = us;
         svg.append("g")
@@ -54,6 +71,7 @@
             .style("stroke", "black")
             .style("fill", "blue")
             .style("fill-opacity", function () {
+				
 
             })
             
@@ -66,7 +84,7 @@
             //         return "blue";
             //     }
             // });
-    });
+    })});
 
     // Read CrimeStatebyState.csv 
  //    d3.csv("CrimeStatebyState.csv", function(d) {
