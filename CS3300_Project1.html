@@ -62,7 +62,7 @@ function calculateCrimeCount(file,callback){
     // Draw the map of the 50 states
 	calculateCrimeCount("CrimeStatebyState.csv",function(stateCrimeCount){
 	//called the callback function to use the counts when opening the us data.
-    d3.json("us.json", function(error, us) {
+    d3.json("us-name.json", function(error, us) {
         mapData = us;
         svg.append("g")
             .selectAll("path")
@@ -72,9 +72,9 @@ function calculateCrimeCount(file,callback){
             .attr("d", path)
             .style("stroke", "black")
             .style("fill", "blue")
-            .style("fill-opacity", function () {
-				
-
+            .style("fill-opacity", function (d) {
+            	
+				return opacity(stateCrimeCount[d.properties.name]);
             })
             
             //s.style("fill-opacity", opacity(1000000)); //opacity(d.Count)
