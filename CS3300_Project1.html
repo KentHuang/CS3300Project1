@@ -44,7 +44,9 @@
 	
 	
 function calculateCrimeCount(file,callback){
-
+	/*
+	return a hashtable of state:count
+	*/
 	
 	var stateCrimeCount = new Object();
 	var crimeState;
@@ -59,7 +61,7 @@ function calculateCrimeCount(file,callback){
 };
     // Draw the map of the 50 states
 	calculateCrimeCount("CrimeStatebyState.csv",function(stateCrimeCount){
-	
+	//called the callback function to use the counts when opening the us data.
     d3.json("us.json", function(error, us) {
         mapData = us;
         svg.append("g")
