@@ -1,0 +1,67 @@
+
+body {
+    width: 1800px;
+    margin: 0 auto;
+    font-family: "Prociono", "serif";
+    font-size: 15pt;
+    background: rgb(225,255,255); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(225,255,255,1) 0%, rgba(253,255,255,1) 0%, rgba(225,255,255,1) 0%, rgba(225,255,255,1) 12%, rgba(230,248,253,1) 30%, rgba(200,238,251,1) 54%, rgba(190,228,248,1) 75%, rgba(177,216,245,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(225,255,255,1)), color-stop(0%,rgba(253,255,255,1)), color-stop(0%,rgba(225,255,255,1)), color-stop(12%,rgba(225,255,255,1)), color-stop(30%,rgba(230,248,253,1)), color-stop(54%,rgba(200,238,251,1)), color-stop(75%,rgba(190,228,248,1)), color-stop(100%,rgba(177,216,245,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(225,255,255,1) 0%,rgba(253,255,255,1) 0%,rgba(225,255,255,1) 0%,rgba(225,255,255,1) 12%,rgba(230,248,253,1) 30%,rgba(200,238,251,1) 54%,rgba(190,228,248,1) 75%,rgba(177,216,245,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(225,255,255,1) 0%,rgba(253,255,255,1) 0%,rgba(225,255,255,1) 0%,rgba(225,255,255,1) 12%,rgba(230,248,253,1) 30%,rgba(200,238,251,1) 54%,rgba(190,228,248,1) 75%,rgba(177,216,245,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(225,255,255,1) 0%,rgba(253,255,255,1) 0%,rgba(225,255,255,1) 0%,rgba(225,255,255,1) 12%,rgba(230,248,253,1) 30%,rgba(200,238,251,1) 54%,rgba(190,228,248,1) 75%,rgba(177,216,245,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(225,255,255,1) 0%,rgba(253,255,255,1) 0%,rgba(225,255,255,1) 0%,rgba(225,255,255,1) 12%,rgba(230,248,253,1) 30%,rgba(200,238,251,1) 54%,rgba(190,228,248,1) 75%,rgba(177,216,245,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e1ffff', endColorstr='#b1d8f5',GradientType=0 ); /* IE6-9 */
+
+}
+
+#title {
+    font-size: 32pt;
+    text-align: center;
+    padding: 10px;
+}
+
+#year {
+    font-size: 16pt;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    padding-top: 10px;
+}
+
+#mapSvg {
+    margin-top: 25px;
+    font-weight: bold;
+}
+
+.map {
+    float: left;
+    width: 25%;
+}
+
+.last {
+    clear: left;
+}
+
+.row {
+    margin-top: 20px;
+}
+
+#icon {
+    /*border: 1px solid black;*/
+}
+
+.gradientSvg {
+    height: 10px;
+    margin: 20px 0;
+}
+
+.outer-crime {
+    font-weight: bold;
+}
+.crime {
+    font-weight: normal;
+}
+
+.scale_num {
+    font-family:"Times New Roman",Georgia,Serif;
+    font-size: 12pt;
+}
