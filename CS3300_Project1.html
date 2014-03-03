@@ -4,51 +4,52 @@
     <!-- This library supports geographic data -->
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Prociono">
-	<style>
-
-        body {
-            width: 1800px;
-            margin: 0 auto;
-            font-family: "Prociono", "serif";
-            font-size: 15pt;
-        }
-
-        #title {
-            font-size: 32pt;
-            text-align: center;
-        }
-
-        #year {
-            font-size: 16pt;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            padding-top: 10px;
-        }
-
-        svg {
-            /*border: 1px solid black;*/
-            margin-top: 25px;
-            font-weight: bold;
-        }
-
-        .map {
-            float: left;
-            width: 25%;
-        }
-
-        .last {
-            clear: left;
-        }
-
-        .row {
-            margin-top: 20px;
-        }
-    </style>
+	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
 	<div id="title">Crime Counts in the United States From 1960 - 1999</div>
-        <!-- Leave a target where we'll add a map of the world -->
 
-    <div>Violent Crimes</div>
+    <div class="outer-crime">Violent Crimes: <span class="crime">murder and nonnegligent manslaughter, forcible rape, robbery, or aggravated assault</span></div>
+    <svg class="gradientSvg">
+
+        <defs id="defs2297">
+
+            <linearGradient
+               id="linearGradient5283">
+              <stop
+                 style="stop-color:#EFD8D5;stop-opacity:1"
+                 offset="0"
+                 id="stop5285" />
+              <stop
+                 style="stop-color:#ff0000;stop-opacity:1"
+                 offset="1"
+                 id="stop5287" />
+            </linearGradient>
+
+            <linearGradient
+               x1="208"
+               y1="357"
+               x2="784"
+               y2="357"
+               id="linearGradient5289"
+               xlink:href="#linearGradient5283"
+               gradientUnits="userSpaceOnUse" />
+        </defs>
+
+        <rect xmlns="http://www.w3.org/2000/svg" width="720" height="42" x="0" y="0" style="opacity:1;fill:url(#linearGradient5289);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect5281"/>
+    </svg>
+
+    <svg height="30" width="800" class="scale_num">
+        <text x="0" y="15" fill="black">0</text>
+        <text x="100" y="15" fill="black">0</text>
+        <text x="200" y="15" fill="black">100</text>
+        <text x="300" y="15" fill="black">0</text>
+        <text x="400" y="15" fill="black">0</text>
+        <text x="500" y="15" fill="black">0</text>
+        <text x="600" y="15" fill="black">0</text>
+        <text x="700" y="15" fill="black">0</text>
+    </svg>
+
     <div class="row">
         <div id="map1" class="map"></div>
         <div id="map2" class="map"></div>
@@ -56,8 +57,50 @@
         <div id="map4" class="map"></div>
         <div class="last" />
     </div>
+    
 
-    <div>Property Crimes</div>
+
+    <div class="outer-crime">Property Crimes: <span class="crime">burglary, larceny-theft, or motor vehicle theft</span></div>
+    <svg class="gradientSvg">
+
+        <defs id="defs2297">
+            
+            <linearGradient
+               id="linearGradient5281">
+              <stop
+                 style="stop-color:#ADBBC6;stop-opacity:1"
+                 offset="0"
+                 id="stop5285" />
+              <stop
+                 style="stop-color:#0000FF;stop-opacity:1"
+                 offset="1"
+                 id="stop5287" />
+            </linearGradient>
+
+            <linearGradient
+               x1="208"
+               y1="357"
+               x2="784"
+               y2="357"
+               id="linearGradient5288"
+               xlink:href="#linearGradient5281"
+               gradientUnits="userSpaceOnUse" />
+        </defs>
+
+        <rect xmlns="http://www.w3.org/2000/svg" width="720" height="42" x="0" y="0" style="opacity:1;fill:url(#linearGradient5288);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect5281"/>
+    </svg>
+
+    <svg height="30" width="800" class="scale_num">
+        <text x="0" y="15" fill="black">0</text>
+        <text x="100" y="15" fill="black">0</text>
+        <text x="200" y="15" fill="black">100</text>
+        <text x="300" y="15" fill="black">0</text>
+        <text x="400" y="15" fill="black">0</text>
+        <text x="500" y="15" fill="black">0</text>
+        <text x="600" y="15" fill="black">0</text>
+        <text x="700" y="15" fill="black">0</text>
+    </svg>
+
     <div class="row">
         <div id="map5" class="map"></div>
         <div id="map6" class="map"></div>
@@ -66,99 +109,96 @@
         <div class="last" />
     </div>
     
-    <script>
-    // Goal: Make a map of the world, with the US highlighted in blue.
-    //  This is a simplification of http://bl.ocks.org/mbostock/4180634
-    
-    // The data file "world-50m.json" is here:
-    //  http://mimno.infosci.cornell.edu/info3300/world-50m.json
-    
-    var width = 480, height = 500;
+<script>
 
-    // Projections are like scales. We'll use the trusty old Mercator.
-    var projection =  d3.geo.albersUsa().scale(500).translate([(width / 2) , (height / 2)]);
+var width = 480, height = 500;
 
-    // This creates a function called path, that takes a sequence of 
-    //  features and returns a string in SVG <path> language.
-    var path = d3.geo.path()
-        .projection(projection);
-    var opacityPropertyCrimes = d3.scale.linear()
-  		.domain([0,10000000]).range([0,1]);
-	var opacityViolentCrimes = d3.scale.linear()
-  		.domain([0,3000000]).range([0,1]);
+// Projections are like scales. We'll use the trusty old Mercator.
+var projection =  d3.geo.albersUsa().scale(500).translate([(width / 2) , (height / 2)]);
+
+// This creates a function called path, that takes a sequence of 
+//  features and returns a string in SVG <path> language.
+var path = d3.geo.path()
+    .projection(projection);
+var opacityPropertyCrimes = d3.scale.linear()
+		.domain([0,10000000]).range([0,1]);
+var opacityViolentCrimes = d3.scale.linear()
+		.domain([0,3000000]).range([0,1]);
   		
-	function createMap(i,type, decadeStart, decadeEnd,opacity,color){
+// function that creates a map with type, year, opacity, and color
+function createMap(i,type, decadeStart, decadeEnd,opacity,color){
     var svg = d3.select("#map" + i).append("svg")
         .attr("width", width)
-        .attr("height", height);
+        .attr("height", height)
+        .attr("id", "mapSvg");
 
     var mapData;
 
-    
-	
-function calculateCrimeCount(file,type,decadeStart,decadeFinish,callback){
-	/*
-	return a hashtable of state:count
-	*/
-	
-	var stateCrimeCount = new Object();
-	var crimeState;
-	d3.csv(file, function (data) {
-		
-	    crimeState = data;
-		crimeState.forEach(function(entry){
-			if (entry.TypeCrime.trim() == type.trim() && entry.Year >= decadeStart && entry.Year <= decadeFinish){
-				
-				if (entry.State.toLowerCase() in stateCrimeCount){
-					
-					stateCrimeCount[entry.State.toLowerCase()] = Number(stateCrimeCount[entry.State.toLowerCase()]) + Number(entry.Count);
-				}
-				else{
-					
-					stateCrimeCount[entry.State.toLowerCase()] = entry.Count;
-				}
-				
-			}	
-			})
-		callback(stateCrimeCount);
-	  });
-};
 
-	 svg.append("text")
+    // return a hashtable of state:count    
+    function calculateCrimeCount(file,type,decadeStart,decadeFinish,callback){
+    	var stateCrimeCount = new Object();
+    	var crimeState;
+    	d3.csv(file, function (data) {
+    		
+    	    crimeState = data;
+    		crimeState.forEach(function(entry){
+    			if (entry.TypeCrime.trim() == type.trim() && 
+                    entry.Year >= decadeStart && 
+                    entry.Year <= decadeFinish) {
+    				
+        				if (entry.State.toLowerCase() in stateCrimeCount){
+        					
+        					stateCrimeCount[entry.State.toLowerCase()] = 
+                                Number(stateCrimeCount[entry.State.toLowerCase()]) + Number(entry.Count);
+        				} else{	
+        					stateCrimeCount[entry.State.toLowerCase()] = entry.Count;
+        				}
+    				
+                    }
+    			})
+    		callback(stateCrimeCount);
+    	});
+    };
+
+    svg.append("text")
         .attr("x", 225)
         .attr("y", 50)
         .text("" + decadeStart + "'s")
         .attr("id", "year");
 
+
     // Draw the map of the 50 states
 	calculateCrimeCount("CrimeStatebyState.csv",type,decadeStart,decadeEnd,function(stateCrimeCount){
 	//called the callback function to use the counts when opening the us data.
-    d3.json("us-name.json", function(error, us) {
-        mapData = us;
-        svg.append("g")
-            .selectAll("path")
-            .data(topojson.feature(us, us.objects.states).features)
-            .enter()
-            .append("path")
-            .attr("d", path)
-            .style("stroke", "black")
-            .style("fill", color)
-            .style("fill-opacity", function (d) {
-            	return opacity(stateCrimeCount[d.properties.name.toLowerCase()]);
-            })
-
-    })});
+        d3.json("us-name.json", function(error, us) {
+            mapData = us;
+            svg.append("g")
+                .selectAll("path")
+                .data(topojson.feature(us, us.objects.states).features)
+                .enter()
+                .append("path")
+                .attr("d", path)
+                .style("stroke", "black")
+                .style("fill", color)
+                .style("fill-opacity", function (d) {
+                	return opacity(stateCrimeCount[d.properties.name.toLowerCase()]);
+                })
+        });
+    });
 }
-	var start = 1960;
-	var end = 1969
-	for (var i = 1; i < 5; i++) {
-		
-        createMap(i,"Violent Crime", start + (i-1)*10,end + (i-1)*10,opacityViolentCrimes,"red");
-        createMap(i+4,"Property Crime",start + (i-1)*10,end + (i-1)*10,opacityPropertyCrimes,"blue");
-    }
-   
-    </script>
-    
+
+var start = 1960;
+var end = 1969
+
+// create all 8 maps displayed on the screen.
+for (var i = 1; i < 5; i++) {
+    createMap(i,"Violent Crime", start + (i-1)*10,end + (i-1)*10,opacityViolentCrimes,"red");
+    createMap(i+4,"Property Crime",start + (i-1)*10,end + (i-1)*10,opacityPropertyCrimes,"blue");
+}
+
+</script>
+
 </body>
 </html>
 
