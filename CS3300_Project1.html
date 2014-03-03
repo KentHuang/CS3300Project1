@@ -3,17 +3,68 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <!-- This library supports geographic data -->
     <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Prociono">
+	<style>
+
+        body {
+            width: 1800px;
+            margin: 0 auto;
+            font-family: "Prociono", "serif";
+            font-size: 15pt;
+        }
+
+        #title {
+            font-size: 32pt;
+            text-align: center;
+        }
+
+        #year {
+            font-size: 16pt;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            padding-top: 10px;
+        }
+
+        svg {
+            /*border: 1px solid black;*/
+            margin-top: 25px;
+            font-weight: bold;
+        }
+
+        .map {
+            float: left;
+            width: 25%;
+        }
+
+        .last {
+            clear: left;
+        }
+
+        .row {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
+	<div id="title">Crime Counts in the United States From 1960 - 1999</div>
         <!-- Leave a target where we'll add a map of the world -->
-    <div id="map1" class="map"></div>
-    <div id="map2" class="map"></div>
-    <div id="map3" class="map"></div>
-    <div id="map4" class="map"></div>
-    <div id="map5" class="map"></div>
-    <div id="map6" class="map"></div>
-    <div id="map7" class="map"></div>
-    <div id="map8" class="map"></div>
+
+    <div>Violent Crimes</div>
+    <div class="row">
+        <div id="map1" class="map"></div>
+        <div id="map2" class="map"></div>
+        <div id="map3" class="map"></div>
+        <div id="map4" class="map"></div>
+        <div class="last" />
+    </div>
+
+    <div>Property Crimes</div>
+    <div class="row">
+        <div id="map5" class="map"></div>
+        <div id="map6" class="map"></div>
+        <div id="map7" class="map"></div>
+        <div id="map8" class="map"></div>
+        <div class="last" />
+    </div>
     
     <script>
     // Goal: Make a map of the world, with the US highlighted in blue.
@@ -22,30 +73,32 @@
     // The data file "world-50m.json" is here:
     //  http://mimno.infosci.cornell.edu/info3300/world-50m.json
     
-    var width = 960,
-        height = 500;
+    var width = 480, height = 500;
 
     // Projections are like scales. We'll use the trusty old Mercator.
-    var projection = d3.geo.albersUsa();
+    var projection =  d3.geo.albersUsa().scale(500).translate([(width / 2) , (height / 2)]);
 
     // This creates a function called path, that takes a sequence of 
     //  features and returns a string in SVG <path> language.
     var path = d3.geo.path()
         .projection(projection);
-	function createMap(i){
+    var opacityPropertyCrimes = d3.scale.linear()
+  		.domain([0,10000000]).range([0,1]);
+	var opacityViolentCrimes = d3.scale.linear()
+  		.domain([0,3000000]).range([0,1]);
+  		
+	function createMap(i,type, decadeStart, decadeEnd,opacity,color){
     var svg = d3.select("#map" + i).append("svg")
         .attr("width", width)
         .attr("height", height);
 
     var mapData;
 
-    var opacity = d3.scale.linear()
-  		.domain([0,200000]).range([0,1]);
-
+    
 	
 function calculateCrimeCount(file,type,decadeStart,decadeFinish,callback){
 	/*
-	return a hashtable of state:count 
+	return a hashtable of state:count
 	*/
 	
 	var stateCrimeCount = new Object();
@@ -71,9 +124,14 @@ function calculateCrimeCount(file,type,decadeStart,decadeFinish,callback){
 	  });
 };
 
+	 svg.append("text")
+        .attr("x", 225)
+        .attr("y", 50)
+        .text("" + decadeStart + "'s")
+        .attr("id", "year");
 
     // Draw the map of the 50 states
-	calculateCrimeCount("CrimeStatebyState.csv","Violent Crime",1960,1969,function(stateCrimeCount){
+	calculateCrimeCount("CrimeStatebyState.csv",type,decadeStart,decadeEnd,function(stateCrimeCount){
 	//called the callback function to use the counts when opening the us data.
     d3.json("us-name.json", function(error, us) {
         mapData = us;
@@ -84,15 +142,19 @@ function calculateCrimeCount(file,type,decadeStart,decadeFinish,callback){
             .append("path")
             .attr("d", path)
             .style("stroke", "black")
-            .style("fill", "blue")
+            .style("fill", color)
             .style("fill-opacity", function (d) {
             	return opacity(stateCrimeCount[d.properties.name.toLowerCase()]);
             })
 
     })});
 }
-	for (var i = 1; i < 9; i++) {
-        createMap(i);
+	var start = 1960;
+	var end = 1969
+	for (var i = 1; i < 5; i++) {
+		
+        createMap(i,"Violent Crime", start + (i-1)*10,end + (i-1)*10,opacityViolentCrimes,"red");
+        createMap(i+4,"Property Crime",start + (i-1)*10,end + (i-1)*10,opacityPropertyCrimes,"blue");
     }
    
     </script>
